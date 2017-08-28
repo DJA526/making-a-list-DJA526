@@ -1,19 +1,15 @@
 
-public class LinkedList implements LinkedListInterface{
+public class LinkedList<T> implements LinkedListInterface<T>{
 	
-	Node start = null;
+	private Node<T> start = null;
 
-	Node end = null;
+	private Node<T> end = null;
 
 	int size = 0;
 
 	@Override
 	public boolean isEmpty() {
-		if (size == 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return size==0;
 	}
 
 	@Override
@@ -22,33 +18,56 @@ public class LinkedList implements LinkedListInterface{
 	}
 
 	@Override
-	public void addFirst(Object data) {
-		Node first = new Node(data, start);
-		Node temp = start;
-		start = first;
-		start.setNext(temp);
-	}
-
-	@Override
-	public void addLast(Object data) {
-		while (true) {
-			Node n = start;
-			if (n.getNext() == null) {
-				
-			}
+	public void addFirst(T data) {
+		if (isEmpty()) {
+			start = end = new Node<T>(data, start);	
+		} else {
+			start = new Node<T>(data, start);
 		}
+		size++;
 	}
 
 	@Override
-	public void add(Object data, int index) {
-		
-		// TODO Auto-generated method stub
+	public void addLast(T data) {
+		if (isEmpty()) {
+			start = end = new Node<T>(data, end);
+		} else {
+			Node<T> newEnd = new Node<T>(data, null);
+			end.setNext(newEnd);
+			end = newEnd;
+		}
+		size++;
+	}
+
+	@Override
+	public void add(T data, int index) {
+		Node<T> n = start;
+		for (int i = 0; i < index - 1; i++) {
+			n = n.getNext();
+		}
+		Node<T> add = new Node<T>(data, n.getNext().getNext());
+		n.getNext().setNext(add);
+		size++;
 	}
 
 	@Override
 	public void remove(int index) {
-		// TODO Auto-generated method stub
-		
+		Node<T> n = start;
+		for (int i = 0; i < index - 1; i++) {
+			n = n.getNext();
+		}
+		n.setNext(n.getNext().getNext());
+		size--;
+	}
+	
+	public String toString() {
+		String s = "";
+		Node<T> n = start;
+		while (n != null) {
+			s += n.getData().toString();
+			n = n.getNext();
+		}
+		return s;
 	}
 
 }
